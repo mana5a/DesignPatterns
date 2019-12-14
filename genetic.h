@@ -6,6 +6,8 @@ using namespace std;
 
 #define NUM_CITY 4
 
+#define CHR_SIZE 5
+
 typedef vector<int> chromosome;
 
 class Genome

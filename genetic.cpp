@@ -1,13 +1,12 @@
 #include "helper.h"
 #include "genetic.h"
 
-
 vector <int> prototype= {1,2,3};
 
 float Genome::fitness(chromosome chr)
 {
     float distance=0;
-    for(int i=0;i<chr.size()-1;++i)
+    for(int i=0;i<CHR_SIZE-1;++i)
     {
         distance+=dist_mat[chr[i]][chr[i+1]];
     }
@@ -55,7 +54,7 @@ void Genome::display_population()
 
 void Genome::display_chromosome(chromosome chr,float fit)
 {
-    for (int j = 0; j < chr.size(); ++j)
+    for (int j = 0; j < CHR_SIZE; ++j)
     {
         cout << chr[j]<<" ";
     }
@@ -94,8 +93,8 @@ void Genome::run_GA()
 
 chromosome Genome::mutation(chromosome chr)
 {
-    int r=random_num(1,chr.size()-1);
-    int l=random_num(1,chr.size()-1);
+    int r=random_num(1,CHR_SIZE-1);
+    int l=random_num(1,CHR_SIZE-1);
     int temp=chr[l];
     chr[l]=chr[r];
     chr[r]=temp;
