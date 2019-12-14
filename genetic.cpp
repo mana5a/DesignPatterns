@@ -5,11 +5,11 @@ using namespace std;
 
 #define POPULATION_SIZE 50
 
-#define NUM_CITY 5
+#define NUM_CITY 4
 
 typedef vector<int> chromosome;
 
-vector <int> prototype= {1,2,3,4};
+vector <int> prototype= {1,2,3};
 
 int random_num(int start, int end) 
 { 
@@ -18,12 +18,11 @@ int random_num(int start, int end)
     return random_int; 
 } 
 
-//graph n*n
 class Genome
 {
     private:
     vector<vector<int>> dist_mat;
-    vector<vector<int>> population;
+    vector<chromosome> population;
     
     public:
     void init_population()
@@ -62,6 +61,7 @@ class Genome
             {
                 cout << population[i][j]<<" ";
             }
+            cout<<"Distance: "<<fitness(population[i]);
             cout<<"\n";
         }
     }
@@ -76,6 +76,15 @@ class Genome
             }
             cout<<"\n";
         }
+    }
+    float fitness(chromosome chr)
+    {
+        int distance=0;
+        for(int i=0;i<chr.size()-1;i++)
+        {
+            distance+=dist_mat[chr[i]][chr[i+1]];
+        }
+        return 1/distance;
     }
 
 };
