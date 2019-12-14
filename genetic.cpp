@@ -113,17 +113,6 @@ void Genome::run_GA()
     display_population();
 }
 
-
-// chromosome Genome::mutation(chromosome chr)
-// {
-//     int r=random_num(1,CHR_SIZE-1);
-//     int l=random_num(1,CHR_SIZE-1);
-//     int temp=chr[l];
-//     chr[l]=chr[r];
-//     chr[r]=temp;
-//     return chr;
-// }
-
 void Genome::selection()
 {
     int sum=0;
