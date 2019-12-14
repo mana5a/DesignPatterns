@@ -22,7 +22,7 @@ int random_num(int start, int end)
 class Genome
 {
     private:
-    vector<vector<int>(NUM_CITY)> dist_mat(NUM_CITY);
+    vector<vector<int>> dist_mat;
     vector<vector<int>> population;
     
     public:
@@ -41,7 +41,7 @@ class Genome
                 v.erase(v.begin()+r);
             }
             v1.push_back(0);
-            this.population.push_back(v1);
+            population.push_back(v1);
         }
     }
     Genome()
@@ -52,26 +52,27 @@ class Genome
                 { 15, 35, 0, 30 }, 
                 { 20, 25, 30, 0 } };
     }
-    display_population()
+    void display_population()
     {
         cout<<"Population\n";
-        for (int i = 0; i < this.population.size(); i++)
+        cout<<"Size:"<<population.size()<<"\n";
+        for (int i = 0; i < population.size(); i++)
         {
-            for (int j = 0; j < this.population[i].size(); j++)
+            for (int j = 0; j < population[i].size(); j++)
             {
-                cout << this.population[i][j]<<" ";
+                cout << population[i][j]<<" ";
             }
             cout<<"\n";
         }
     }
-    display_dist_mat()
+    void display_dist_mat()
     {
         cout<<"Distance Matrix\n";
-        for (int i = 0; i < this.dist_mat.size(); i++)
+        for (int i = 0; i < dist_mat.size(); i++)
         {
-            for (int j = 0; j < this.dist_mat[i].size(); j++)
+            for (int j = 0; j < dist_mat[i].size(); j++)
             {
-                cout << this.dist_mat[i][j]<<" ";
+                cout << dist_mat[i][j]<<" ";
             }
             cout<<"\n";
         }
@@ -86,5 +87,3 @@ int main()
     gene.display_population();
     gene.display_dist_mat();
 }
-
-
