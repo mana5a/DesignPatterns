@@ -11,8 +11,8 @@ int random_num(int start, int end)
 
 chromosome m_inversion(chromosome chr)
 {
-    int r=random_num(1,chr.size()-1);
-    int l=random_num(1,chr.size()-1);
+    int r=random_num(1,CHR_SIZE-1);
+    int l=random_num(1,CHR_SIZE-1);
     reverse(chr.begin()+l,chr.begin()+r);
     return chr;
 }
@@ -21,8 +21,8 @@ chromosome m_scramble(chromosome chr)
 {
     for(int i=0;i<5;++i)
     {
-        int r=random_num(1,chr.size()-1);
-        int l=random_num(1,chr.size()-1);
+        int r=random_num(1,CHR_SIZE-1);
+        int l=random_num(1,CHR_SIZE-1);
         int temp=chr[l];
         chr[l]=chr[r];
         chr[r]=temp;
@@ -32,8 +32,8 @@ chromosome m_scramble(chromosome chr)
 
 chromosome m_swap(chromosome chr)
 {
-    int r=random_num(1,chr.size()-1);
-    int l=random_num(1,chr.size()-1);
+    int r=random_num(1,CHR_SIZE-1);
+    int l=random_num(1,CHR_SIZE-1);
     int temp=chr[l];
     chr[l]=chr[r];
     chr[r]=temp;
