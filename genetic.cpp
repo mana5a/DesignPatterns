@@ -61,8 +61,18 @@ class Genome
             {
                 cout << population[i][j]<<" ";
             }
-            cout<<"Distance: "<<fitness(population[i]);
+            // cout<<"Distance: "<<fitness(population[i]);
+            cout<<"Mutation:";
+            display_chromosome(mutation(population[i]));
             cout<<"\n";
+        }
+    }
+
+    void display_chromosome(chromosome chr)
+    {
+        for (int j = 0; j < chr.size(); j++)
+        {
+            cout << chr[j]<<" ";
         }
     }
     void display_dist_mat()
@@ -86,6 +96,18 @@ class Genome
         }
         return 1/distance;
     }
+
+    chromosome mutation(chromosome chr)
+    {
+        int r=random_num(1,chr.size()-1);
+        int l=random_num(1,chr.size()-1);
+        int temp=chr[l];
+        chr[l]=chr[r];
+        chr[r]=temp;
+        return chr;
+    }
+
+    
 
 };
 
