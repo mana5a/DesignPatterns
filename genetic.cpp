@@ -48,6 +48,7 @@ Genome::Genome()
     // { 15, 35, 0, 30 }, 
     // { 20, 25, 30, 0 } };
     strategy_mutation_ = new Swap_Mutation;
+    strategy_selection_ = new RouletteWheel_Selection;
     init_population();
 }
 void Genome::display_population()
@@ -85,6 +86,12 @@ void Genome::display_dist_mat()
     }
 }
 
+Strategy_Selection::~Strategy_Selection()
+{}
+
+Strategy_Mutation::~Strategy_Mutation()
+{}
+
 void Genome::set_mutation_strategy(int type)
 {
     delete strategy_mutation_;
@@ -96,11 +103,20 @@ void Genome::set_mutation_strategy(int type)
         strategy_mutation_ = new Scramble_Mutation;
 }
 
+void Genome::set_selection_strategy(int type)
+{
+    delete strategy_selection_;
+    if (type == RouletteWheel)
+        strategy_selection_ = new RouletteWheel_Selection;
+    else if (type == Tournament)
+        strategy_selection_ = new Tournament_Selection;
+}
+
 void Genome::run_GA()
 {
     cout<<"Initial Population\n";
     display_population();
-    set_mutation_strategy(Inversion);
+    set_mutation_strategy(Swap);
     for(int i=0;i<POPULATION_SIZE;++i)
     {
         population[i].first=strategy_mutation_->mutation(population[i].first);
@@ -108,39 +124,10 @@ void Genome::run_GA()
     }
     cout<<"After Mutation\n";
     display_population();
-    selection();
+    set_selection_strategy(Tournament);
+    strategy_selection_->selection(population);
     cout<<"After Selection\n";
     display_population();
-}
-
-void Genome::selection()
-{
-    int sum=0;
-    vector <pair<vector<int>,float>> ump;
-    for(int i=0;i<POPULATION_SIZE;++i)
-    {
-        int val=fitness(population[i].first);
-        sum+=val;
-    }
-    cout<<"sum:"<<sum<<"\n";
-    vector <pair<vector<int>,float>> topk;
-    for(int i=0;i<POPULATION_SIZE;++i)
-    {
-        int val=fitness(population[i].first);
-        float select_prob=val/sum;
-
-        topk.push_back(make_pair(population[i].first,select_prob));
-        sort(topk.begin(),topk.end(),compare);
-
-        
-
-    }
-    for(int i=0;i<POPULATION_SIZE;++i)
-    {
-        ump.push_back(make_pair(topk[i].first,fitness(topk[i].first)));
-    }
-    population=ump;
-    
 }
 
 
