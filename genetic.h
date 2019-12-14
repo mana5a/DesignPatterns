@@ -1,5 +1,5 @@
 #include<bits/stdc++.h>
-
+#include "helper.h"
 using namespace std;
 
 #define POPULATION_SIZE 10
@@ -29,4 +29,36 @@ class Genome
     void display_dist_mat();
 
     void run_GA();
+};
+
+class Strategy_Mutation
+{
+  public:
+    Strategy_Mutation();
+  private:
+    virtual chromosome justify(chromosome chr) = 0;
+};
+
+class Swap_Mutation: public Strategy_Mutation
+{
+  public:
+    Swap_Mutation();
+  private:
+     chromosome justify(chromosome chr);
+};
+
+class Inversion_Mutation: public Strategy_Mutation
+{
+  public:
+    Inversion_Mutation();
+  private:
+     chromosome justify(chromosome chr);
+};
+
+class Scramble_Mutation: public Strategy_Mutation
+{
+  public:
+    Scramble_Mutation();
+  private:
+     chromosome justify(chromosome chr);
 };

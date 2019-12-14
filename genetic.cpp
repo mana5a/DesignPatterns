@@ -1,4 +1,3 @@
-#include "helper.h"
 #include "genetic.h"
 
 vector <int> prototype= {1,2,3};
