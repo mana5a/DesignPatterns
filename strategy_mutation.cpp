@@ -1,33 +1,33 @@
 #include "genetic.h"
 
-class Strategy_Mutation
+chromosome Inversion_Mutation::mutation(chromosome chr)
 {
-  public:
-    Strategy_Mutation();
-  private:
-    virtual chromosome justify(chromosome chr) = 0;
-};
+    int r=random_num(1,CHR_SIZE-1);
+    int l=random_num(1,CHR_SIZE-1);
+    reverse(chr.begin()+l,chr.begin()+r);
+    return chr;
+}
 
-class Swap_Mutation: public Strategy_Mutation
+chromosome Scramble_Mutation::mutation(chromosome chr)
 {
-  public:
-    Swap_Mutation();
-  private:
-     chromosome justify(chromosome chr);
-};
+    for(int i=0;i<5;++i)
+    {
+        int r=random_num(1,CHR_SIZE-1);
+        int l=random_num(1,CHR_SIZE-1);
+        int temp=chr[l];
+        chr[l]=chr[r];
+        chr[r]=temp;
+    }
+    return chr;
+}
 
-class Inversion_Mutation: public Strategy_Mutation
+chromosome Swap_Mutation::mutation(chromosome chr)
 {
-  public:
-    Inversion_Mutation();
-  private:
-     chromosome justify(chromosome chr);
-};
+    int r=random_num(1,CHR_SIZE-1);
+    int l=random_num(1,CHR_SIZE-1);
+    int temp=chr[l];
+    chr[l]=chr[r];
+    chr[r]=temp;
+    return chr;
+}
 
-class Scramble_Mutation: public Strategy_Mutation
-{
-  public:
-    Scramble_Mutation();
-  private:
-     chromosome justify(chromosome chr);
-};

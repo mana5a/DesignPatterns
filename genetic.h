@@ -4,23 +4,56 @@ using namespace std;
 
 #define POPULATION_SIZE 10
 
-#define NUM_CITY 4
+#define NUM_CITY 10
 
-#define CHR_SIZE 5
+#define CHR_SIZE 11
+
+enum MutationType
+{
+    Swap, Inversion,Scramble
+};
 
 typedef vector<int> chromosome;
+
+class Strategy_Mutation
+{
+  int a_;
+  public:
+  virtual ~Strategy_Mutation()=0;
+  virtual chromosome mutation(chromosome chr)=0;
+};
+
+class Swap_Mutation: public Strategy_Mutation
+{
+  public:
+    chromosome mutation(chromosome chr);
+};
+
+class Inversion_Mutation: public Strategy_Mutation
+{
+  public:
+    chromosome mutation(chromosome chr);
+};
+
+class Scramble_Mutation: public Strategy_Mutation
+{
+  public:
+    chromosome mutation(chromosome chr);
+};
 
 class Genome
 {
     private:
     vector<vector<int>> dist_mat;
     vector<pair<chromosome, float>> population;
-    
+    Strategy_Mutation *strategy_mutation_;
+
     public:
     Genome();
     void init_population();
     
-    chromosome mutation(chromosome chr);
+    // chromosome mutation(chromosome chr);
+    void set_mutation_strategy(int);
     void selection();
     float fitness(chromosome chr);
 
@@ -29,36 +62,4 @@ class Genome
     void display_dist_mat();
 
     void run_GA();
-};
-
-class Strategy_Mutation
-{
-  public:
-    Strategy_Mutation();
-  private:
-    virtual chromosome justify(chromosome chr) = 0;
-};
-
-class Swap_Mutation: public Strategy_Mutation
-{
-  public:
-    Swap_Mutation();
-  private:
-     chromosome justify(chromosome chr);
-};
-
-class Inversion_Mutation: public Strategy_Mutation
-{
-  public:
-    Inversion_Mutation();
-  private:
-     chromosome justify(chromosome chr);
-};
-
-class Scramble_Mutation: public Strategy_Mutation
-{
-  public:
-    Scramble_Mutation();
-  private:
-     chromosome justify(chromosome chr);
 };

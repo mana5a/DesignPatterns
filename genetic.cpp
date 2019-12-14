@@ -1,6 +1,6 @@
 #include "genetic.h"
 
-vector <int> prototype= {1,2,3};
+vector <int> prototype= {1,2,3,4,5,6,7,8,9};
 
 float Genome::fitness(chromosome chr)
 {
@@ -30,23 +30,24 @@ void Genome::init_population()
         population.push_back(make_pair(v1,fit));
     }
 }
+
 Genome::Genome()
 {
-    dist_mat={{ 0, 10, 15, 20 }, 
-            { 10, 0, 35, 25 }, 
-            { 15, 35, 0, 30 }, 
-            { 20, 25, 30, 0 } };
-
-    // {{0 ,42 ,30 ,11 ,16 ,48 ,23 ,25 ,28 ,34},
-        // {42 ,0 ,20 ,30 ,42 ,40 ,47 ,21 ,28 ,21},
-        // {30 ,20 ,0 ,34 ,32 ,34 ,39 ,46 ,49 ,12},
-        // {11 ,30 ,34 ,0 ,37 ,39 ,30 ,36 ,34 ,43},
-        // {16 ,42 ,32 ,37 ,0 ,30 ,24 ,48 ,34 ,19},
-        // {48 ,40 ,34 ,39 ,30 ,0 ,50 ,15 ,10 ,43},
-        // {23 ,47 ,39 ,30 ,24 ,50 ,0 ,36 ,39 ,13},
-        // {25 ,21 ,46 ,36 ,48 ,15 ,36 ,0 ,38 ,50},
-        // {28 ,28 ,49 ,34 ,34 ,10 ,39 ,38 ,0 ,28},
-        // {34 ,21 ,12 ,43 ,19 ,43 ,13 ,50 ,28 ,0}}
+    dist_mat={{0 ,42 ,30 ,11 ,16 ,48 ,23 ,25 ,28 ,34},
+        {42 ,0 ,20 ,30 ,42 ,40 ,47 ,21 ,28 ,21},
+        {30 ,20 ,0 ,34 ,32 ,34 ,39 ,46 ,49 ,12},
+        {11 ,30 ,34 ,0 ,37 ,39 ,30 ,36 ,34 ,43},
+        {16 ,42 ,32 ,37 ,0 ,30 ,24 ,48 ,34 ,19},
+        {48 ,40 ,34 ,39 ,30 ,0 ,50 ,15 ,10 ,43},
+        {23 ,47 ,39 ,30 ,24 ,50 ,0 ,36 ,39 ,13},
+        {25 ,21 ,46 ,36 ,48 ,15 ,36 ,0 ,38 ,50},
+        {28 ,28 ,49 ,34 ,34 ,10 ,39 ,38 ,0 ,28},
+        {34 ,21 ,12 ,43 ,19 ,43 ,13 ,50 ,28 ,0}};
+    // {{ 0, 10, 15, 20 }, 
+    // { 10, 0, 35, 25 }, 
+    // { 15, 35, 0, 30 }, 
+    // { 20, 25, 30, 0 } };
+    strategy_mutation_ = new Swap_Mutation;
     init_population();
 }
 void Genome::display_population()
@@ -84,13 +85,25 @@ void Genome::display_dist_mat()
     }
 }
 
+void Genome::set_mutation_strategy(int type)
+{
+    delete strategy_mutation_;
+    if (type == Swap)
+        strategy_mutation_ = new Swap_Mutation;
+    else if (type == Inversion)
+        strategy_mutation_ = new Inversion_Mutation;
+    else if (type == Scramble)
+        strategy_mutation_ = new Scramble_Mutation;
+}
+
 void Genome::run_GA()
 {
     cout<<"Initial Population\n";
     display_population();
+    set_mutation_strategy(Inversion);
     for(int i=0;i<POPULATION_SIZE;++i)
     {
-        mutation(population[i].first);
+        population[i].first=strategy_mutation_->mutation(population[i].first);
         population[i].second=fitness(population[i].first);
     }
     cout<<"After Mutation\n";
@@ -101,15 +114,15 @@ void Genome::run_GA()
 }
 
 
-chromosome Genome::mutation(chromosome chr)
-{
-    int r=random_num(1,CHR_SIZE-1);
-    int l=random_num(1,CHR_SIZE-1);
-    int temp=chr[l];
-    chr[l]=chr[r];
-    chr[r]=temp;
-    return chr;
-}
+// chromosome Genome::mutation(chromosome chr)
+// {
+//     int r=random_num(1,CHR_SIZE-1);
+//     int l=random_num(1,CHR_SIZE-1);
+//     int temp=chr[l];
+//     chr[l]=chr[r];
+//     chr[r]=temp;
+//     return chr;
+// }
 
 void Genome::selection()
 {
