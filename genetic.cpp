@@ -196,4 +196,4 @@ int main()
     //gene.display_population();
     //gene.display_dist_mat();
     //gene.selection();
-}
+}   
