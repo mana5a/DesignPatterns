@@ -48,7 +48,7 @@ Genome::Genome()
     // { 15, 35, 0, 30 }, 
     // { 20, 25, 30, 0 } };
     strategy_mutation_ = new Swap_Mutation;
-    strategy_selection_ = new RouletteWheel_Selection;
+    strategy_selection_ = new Tournament_Selection;
     init_population();
 }
 void Genome::display_population()
@@ -112,22 +112,107 @@ void Genome::set_selection_strategy(int type)
         strategy_selection_ = new Tournament_Selection;
 }
 
+chr_set Genome::crossover(chromosome p1, chromosome p2)
+{
+    chr_set children;
+    chromosome c1,c2;
+    int r=random_num(1,CHR_SIZE-1);
+    int l=random_num(1,CHR_SIZE-1);
+    if(r==l) 
+    {
+      if(r!=CHR_SIZE-2)
+        ++r;
+      else
+        --l;
+    }
+    for(int i=0;i<r;++i)
+    {
+        c1.push_back(p1[i]);
+        c2.push_back(p2[i]);
+    }
+    for(int i=l;i>=r;--i)
+    {
+        c1.push_back(p2[l]);  //4 to 6, start w 6 then 5 then 4
+        c2.push_back(p1[l]);
+    }
+    for(int i=l+1;i<CHR_SIZE-1;++i)
+    {
+        c1.push_back(p1[i]);
+        c2.push_back(p2[i]);
+    }
+   
+    children.push_back(make_pair(c1,fitness(c1)));
+    children.push_back(make_pair(c2,fitness(c2)));
+    return children;
+}
+
 void Genome::run_GA()
 {
     cout<<"Initial Population\n";
     display_population();
-    set_mutation_strategy(Swap);
-    for(int i=0;i<POPULATION_SIZE;++i)
+    float threshold=population[0].second;
+    int gen=0;
+    for(int i=0;i<GENERATIONS;++i)
     {
-        population[i].first=strategy_mutation_->mutation(population[i].first);
-        population[i].second=fitness(population[i].first);
+        cout<<"Generation #"<<i<<"\n";
+        int k=0;
+        while(k<int(CROSSOVER_RATE*POPULATION_SIZE))
+        {
+            int r=random_num(0,POPULATION_SIZE);
+            int l=0;
+            do
+            {
+             l=random_num(0,POPULATION_SIZE);   
+            } while (l!=r);         
+            chr_set chl=crossover(population[r].first,population[l].first);
+            // population[r]=chl[0];
+            // population[l]=chl[1];
+            ++k;
+        }
+        cout<<"After Crossover\n";
+        display_population();
+
+        set_mutation_strategy(Swap);
+        int j=0;
+        while(j<int(MUTATION_RATE*POPULATION_SIZE))
+        {
+            int i=random_num(0,POPULATION_SIZE);
+            population[i].first=strategy_mutation_->mutation(population[i].first);
+            population[i].second=fitness(population[i].first);
+            ++j;
+        }
+        cout<<"After Mutation\n";
+        display_population();
+        
+        //set_selection_strategy(Tournament);
+        vector<pair<chromosome,float>> new_pop;
+        float avg_fitness=0;
+        for(int j=0;j<POPULATION_SIZE;++j)
+        {
+            chromosome c;//=population[i].first;
+            c=strategy_selection_->selection(population);
+            float fit=fitness(c);
+            new_pop.push_back(make_pair(c,fit));
+            avg_fitness+=fit;
+            if(fit<threshold)
+            {
+                threshold=fit;
+                gen=i;
+            }
+        }
+        avg_fitness/=POPULATION_SIZE;
+        population=new_pop;
+        cout<<"After Selection\n";
+        display_population();
+        cout<<"Threshold:"<<threshold<<"\t"<<"Generation:"<<gen<<"\n";
+        cout<<"Average Fitness:"<<avg_fitness<<"\n\n\n";
+
+        if(AlmostEqualRelative(threshold,avg_fitness))
+        {
+            cout<<"Fitness reached\n";
+            break;
+        }
     }
-    cout<<"After Mutation\n";
-    display_population();
-    set_selection_strategy(Tournament);
-    strategy_selection_->selection(population);
-    cout<<"After Selection\n";
-    display_population();
 }
 
 

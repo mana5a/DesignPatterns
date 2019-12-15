@@ -2,13 +2,19 @@
 #include "helper.h"
 using namespace std;
 
-#define k 3
+#define K 3
 
 #define POPULATION_SIZE 10
 
 #define NUM_CITY 10
 
 #define CHR_SIZE 11
+
+#define GENERATIONS 1000
+
+#define CROSSOVER_RATE 0.6
+
+#define MUTATION_RATE 0.4
 
 enum MutationType
 {
@@ -21,6 +27,8 @@ enum SelectionType
 };
 
 typedef vector<int> chromosome;
+
+typedef vector <pair<vector<int>,float>> chr_set;
 
 class Strategy_Mutation
 {
@@ -51,19 +59,19 @@ class Strategy_Selection
 {
   public:
   virtual ~Strategy_Selection()=0;
-  virtual chromosome selection(vector<pair<chromosome,float>>&)=0;
+  virtual chromosome selection(vector<pair<chromosome,float>> )=0;
 };
 
 class Tournament_Selection: public Strategy_Selection
 {
   public:
-    chromosome selection(vector<pair<chromosome,float>>&);
+    chromosome selection(vector<pair<chromosome,float>> );
 };
 
 class RouletteWheel_Selection: public Strategy_Selection
 {
   public:
-    chromosome selection(vector<pair<chromosome,float>>&);
+    chromosome selection(vector<pair<chromosome,float>> );
 };
 
 class Genome
@@ -83,6 +91,8 @@ class Genome
     void set_selection_strategy(int);
     // void selection();
     float fitness(chromosome chr);
+
+    chr_set crossover(chromosome p1, chromosome p2);
 
     void display_population();
     void display_chromosome(chromosome chr,float fit);
