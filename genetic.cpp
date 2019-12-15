@@ -79,7 +79,7 @@ void Genome::display_population()
         {
             cout << population[i].first[j]<<" ";
         }
-        cout<<"\tFitness:"<<population[i].second<<"\n";
+        cout<<population[i].second<<"\n";
         cout<<"\n";
     }
 }
@@ -241,11 +241,9 @@ void Genome::run_GA()
             menu(*this);
             saveState();
         }
-        //if(AlmostEqualRelative(avg_fitness,threshold))
-        if(int(avg_fitness)<int(threshold))
+        if(AlmostEqualRelative(threshold,avg_fitness))
         {
             cout<<"Fitness reached\n";
-            cout<<"Average fitness:"<<avg_fitness<<"\n";
             break;
         }
     }

@@ -14,7 +14,7 @@ bool AlmostEqualRelative(float A, float B)
     A = fabs(A);
     B = fabs(B);
     // Find the largest
-    float largest = (A<B) ? B : A;
+    float largest = (B > A) ? B : A;
  
     return (diff <= largest * FLT_EPSILON);
     
@@ -109,7 +109,7 @@ void menu(Genome& gene)
         cout<<"1.Change Selection\n";
         cout<<"2.Change Mutation\n";
         cout<<"3.Undo\n";
-        cout<<"4.Continue Algorithm\n";
+        cout<<"4.Go back\n";
         cin>>ch_main;
         switch(ch_main)
         {
