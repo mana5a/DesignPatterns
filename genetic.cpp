@@ -1,6 +1,12 @@
-#include "genetic.h"
+#include "helper.h"
 
 vector <int> prototype= {1,2,3,4,5,6,7,8,9};
+
+Strategy_Selection::~Strategy_Selection()
+{}
+
+Strategy_Mutation::~Strategy_Mutation()
+{}
 
 float Genome::fitness(chromosome chr)
 {
@@ -48,8 +54,17 @@ Genome::Genome()
     // { 15, 35, 0, 30 }, 
     // { 20, 25, 30, 0 } };
     strategy_mutation_ = new Swap_Mutation;
-    strategy_selection_ = new Tournament_Selection;
+    mutation_type_=Swap;
+    strategy_selection_ = new RouletteWheel_Selection;
+    selection_type_=RouletteWheel;
     init_population();
+}
+
+void Genome::operations_set()
+{
+    cout<<"Mutation Type: "<<mutation_type_;
+    cout<<"\nSelection Type: "<<selection_type_;
+    cout<<"\n";
 }
 void Genome::display_population()
 {
@@ -86,30 +101,39 @@ void Genome::display_dist_mat()
     }
 }
 
-Strategy_Selection::~Strategy_Selection()
-{}
-
-Strategy_Mutation::~Strategy_Mutation()
-{}
-
 void Genome::set_mutation_strategy(int type)
 {
     delete strategy_mutation_;
     if (type == Swap)
+    {
         strategy_mutation_ = new Swap_Mutation;
+        mutation_type_= Swap;
+    }
     else if (type == Inversion)
+    {
         strategy_mutation_ = new Inversion_Mutation;
+        mutation_type_=Inversion;
+    }
     else if (type == Scramble)
+    {
         strategy_mutation_ = new Scramble_Mutation;
+        mutation_type_=Scramble;
+    }
 }
 
 void Genome::set_selection_strategy(int type)
 {
     delete strategy_selection_;
     if (type == RouletteWheel)
+    {
         strategy_selection_ = new RouletteWheel_Selection;
+        selection_type_=RouletteWheel;
+    }
     else if (type == Tournament)
+    {
         strategy_selection_ = new Tournament_Selection;
+        selection_type_=Tournament;
+    }
 }
 
 chr_set Genome::crossover(chromosome p1, chromosome p2)
@@ -184,7 +208,7 @@ void Genome::run_GA()
         cout<<"After Mutation\n";
         display_population();
         
-        //set_selection_strategy(Tournament);
+        set_selection_strategy(Tournament);
         vector<pair<chromosome,float>> new_pop;
         float avg_fitness=0;
         for(int j=0;j<POPULATION_SIZE;++j)
@@ -219,5 +243,6 @@ void Genome::run_GA()
 int main()
 {
     Genome gene;
+    // menu(gene);
     gene.run_GA();
 }

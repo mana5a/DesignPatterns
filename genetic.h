@@ -1,8 +1,11 @@
 #include<bits/stdc++.h>
-#include "helper.h"
 using namespace std;
 
 #define K 3
+
+#define SELECTION_TYPES 2
+
+#define MUTATION TYPES 3
 
 #define POPULATION_SIZE 10
 
@@ -18,7 +21,7 @@ using namespace std;
 
 enum MutationType
 {
-    Swap, Inversion,Scramble
+    Swap, Inversion, Scramble
 };
 
 enum SelectionType
@@ -81,6 +84,8 @@ class Genome
     vector<pair<chromosome, float>> population;
     Strategy_Mutation *strategy_mutation_;
     Strategy_Selection *strategy_selection_;
+    MutationType mutation_type_;
+    SelectionType selection_type_;
     
     public:
     Genome();
@@ -97,6 +102,7 @@ class Genome
     void display_population();
     void display_chromosome(chromosome chr,float fit);
     void display_dist_mat();
+    void operations_set();
 
     void run_GA();
 };

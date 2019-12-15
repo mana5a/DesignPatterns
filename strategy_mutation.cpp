@@ -1,4 +1,4 @@
-#include "genetic.h"
+#include "helper.h"
 
 chromosome Inversion_Mutation::mutation(chromosome chr)
 {

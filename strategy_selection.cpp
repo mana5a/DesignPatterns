@@ -1,4 +1,4 @@
-#include "genetic.h"
+#include "helper.h"
 
 chromosome RouletteWheel_Selection::selection(vector<pair<chromosome,float>> population)
 {
