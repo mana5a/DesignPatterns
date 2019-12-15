@@ -36,7 +36,8 @@ chromosome Tournament_Selection::selection(vector<pair<chromosome,float>> popula
     chromosome c;
     for(int i=0;i<K;++i)
     {
-        if(AlmostEqualRelative(min,vec[i].second))
+        //if(AlmostEqualRelative(vec[i].second,min))
+        if(int(vec[i].second)<int(min))
         {
             c=vec[i].first;
         }
