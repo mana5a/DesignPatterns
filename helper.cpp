@@ -108,7 +108,8 @@ void menu(Genome& gene)
         cout<<"Choose Action\n";
         cout<<"1.Change Selection\n";
         cout<<"2.Change Mutation\n";
-        cout<<"3.Go back\n";
+        cout<<"3.Undo\n";
+        cout<<"4.Go back\n";
         cin>>ch_main;
         switch(ch_main)
         {
@@ -118,8 +119,17 @@ void menu(Genome& gene)
             case 2:
                 mutation_menu(gene);
                 break;
+            case 3: 
+                if(gene.states.size()!=0)
+                {
+                    gene.reinstateMemento();
+                }
+                else 
+                    cout<<"Cannot undo, no more previous states\n";
+                break;
+                
             default:
                 return;
         }
-    }while(ch_main!=3);
+    }while(ch_main!=4);
 }

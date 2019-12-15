@@ -8,8 +8,8 @@ Strategy_Selection::~Strategy_Selection()
 Strategy_Mutation::~Strategy_Mutation()
 {}
 
-Memento::Memento(chr_set population, MutationType mutation, SelectionType selection)
-:population_state(population), mutation_type_state(mutation), selection_type_state(selection)
+Memento::Memento(int gen,chr_set population, MutationType mutation, SelectionType selection)
+:generation(gen), population_state(population), mutation_type_state(mutation), selection_type_state(selection)
 {}
 
 float Genome::fitness(chromosome chr)
@@ -57,6 +57,7 @@ Genome::Genome()
     // { 10, 0, 35, 25 }, 
     // { 15, 35, 0, 30 }, 
     // { 20, 25, 30, 0 } };
+    generation=0;
     strategy_mutation_ = new Swap_Mutation;
     mutation_type_=Swap;
     strategy_selection_ = new RouletteWheel_Selection;
@@ -180,8 +181,9 @@ void Genome::run_GA()
     display_population();
     float threshold=population[0].second;
     int gen=0;
-    for(int i=0;i<GENERATIONS;++i)
+    for(int i=generation;i<GENERATIONS;++i,++generation)
     {
+        i=generation;
         cout<<"Generation #"<<i<<"\n";
         int k=0;
         while(k<int(CROSSOVER_RATE*POPULATION_SIZE))
@@ -200,7 +202,7 @@ void Genome::run_GA()
         cout<<"After Crossover\n";
         display_population();
 
-        set_mutation_strategy(Swap);
+        //set_mutation_strategy(Swap);
         int j=0;
         while(j<int(MUTATION_RATE*POPULATION_SIZE))
         {
@@ -212,7 +214,7 @@ void Genome::run_GA()
         cout<<"After Mutation\n";
         display_population();
         
-        set_selection_strategy(Tournament);
+        //set_selection_strategy(Tournament);
         vector<pair<chromosome,float>> new_pop;
         float avg_fitness=0;
         for(int j=0;j<POPULATION_SIZE;++j)
@@ -232,30 +234,51 @@ void Genome::run_GA()
         population=new_pop;
         cout<<"After Selection\n";
         display_population();
-        cout<<"Threshold:"<<threshold<<"\t"<<"Generation:"<<gen<<"\n";
+        cout<<"Min value:"<<threshold<<" was found in Generation:"<<gen<<"\n";
         cout<<"Average Fitness:"<<avg_fitness<<"\n\n\n";
-
+        if(i%10==0) 
+        {
+            menu(*this);
+            saveState();
+        }
         if(AlmostEqualRelative(threshold,avg_fitness))
         {
             cout<<"Fitness reached\n";
             break;
         }
     }
+    for(int k=0;k<states.size();++k)
+    {
+        cout<<"Memento of generation #"<<states[k].generation<<"\n";
+        cout<<"Mutation type:"<<states[k].mutation_type_state<<"\t\n";
+        cout<<"Selection type:"<<states[k].selection_type_state<<"\t\n\n";
+
+    }
 }
 
-Memento* Genome::createMemento()
+Memento Genome::createMemento()
 {
-
+    return Memento(generation,population,mutation_type_,selection_type_);
 }
-void Genome::reinstateMemento(Memento* memento)
+void Genome::reinstateMemento()
 {
-
+    Memento popped=states.back();
+    states.erase(states.end()-1);
+    generation=popped.generation;
+    population=popped.population_state;
+    mutation_type_=popped.mutation_type_state;
+    selection_type_=popped.selection_type_state;
 }
 
+void Genome::saveState()
+{
+    Memento newMem=createMemento();
+    states.push_back(newMem);
+}
 
 int main()
 {
     Genome gene;
-    menu(gene);
+    //menu(gene);
     gene.run_GA();
 }

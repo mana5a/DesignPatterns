@@ -13,7 +13,7 @@ using namespace std;
 
 #define CHR_SIZE 11
 
-#define GENERATIONS 50
+#define GENERATIONS 100
 
 #define CROSSOVER_RATE 0.6
 
@@ -83,12 +83,13 @@ public:
 class Memento
 {
 	private:
+		int generation;
 		chr_set population_state;
 		MutationType mutation_type_state;
 		SelectionType selection_type_state;
 		friend class Genome;
 	public:
-		Memento(chr_set population, MutationType mutation, SelectionType selection);
+		Memento(int generation, chr_set population, MutationType mutation, SelectionType selection);
 };
 
 class Genome
@@ -96,6 +97,7 @@ class Genome
 private:
 	vector<vector<int>> dist_mat;
 	chr_set population;
+	int generation;
 	Strategy_Mutation *strategy_mutation_;
 	Strategy_Selection *strategy_selection_;
 	MutationType mutation_type_;
@@ -116,8 +118,10 @@ public:
 	void display_dist_mat();
 	void operations_set();
 
-	Memento *createMemento();
-	void reinstateMemento(Memento*);
+	Memento createMemento();
+	void reinstateMemento();
+  	void saveState();
+  	vector <Memento > states;
 
 	void run_GA();
 };
