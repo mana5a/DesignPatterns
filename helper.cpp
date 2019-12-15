@@ -109,7 +109,7 @@ void menu(Genome& gene)
         cout<<"1.Change Selection\n";
         cout<<"2.Change Mutation\n";
         cout<<"3.Undo\n";
-        cout<<"4.Go back\n";
+        cout<<"4.Continue GA\n";
         cin>>ch_main;
         switch(ch_main)
         {
