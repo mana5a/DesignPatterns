@@ -5,17 +5,18 @@ chromosome RouletteWheel_Selection::selection(vector<pair<chromosome,float>> pop
     int sum=0;
     for(int i=0;i<POPULATION_SIZE;++i)
     {
-        sum+=Genome().fitness(population[i].first);
+        sum+=population[i].second;
     }
-    int rand=random_num(0,sum);
+    float rand=random_num(0,sum);
     float current=0;
     for(int i=0;i<POPULATION_SIZE;++i)
     {
-        current+=Genome().fitness(population[i].first);
-        if(AlmostEqualRelative(rand,current))
-        {
-            return population[i].first;
-        }
+        current+=population[i].second;
+        if(int(current)>=int(rand)) return population[i].first;
+        // if(AlmostEqualRelative(current,rand))
+        // {
+        //     return population[i].first;
+        // }
     }
     //chromosome c={0,1,3,2,7,9,6,4,5,8,0};
     //return c;

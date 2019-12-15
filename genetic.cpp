@@ -243,6 +243,6 @@ void Genome::run_GA()
 int main()
 {
     Genome gene;
-    // menu(gene);
+    menu(gene);
     gene.run_GA();
 }

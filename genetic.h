@@ -13,7 +13,7 @@ using namespace std;
 
 #define CHR_SIZE 11
 
-#define GENERATIONS 1000
+#define GENERATIONS 50
 
 #define CROSSOVER_RATE 0.6
 
