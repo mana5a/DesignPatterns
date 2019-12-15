@@ -8,6 +8,10 @@ Strategy_Selection::~Strategy_Selection()
 Strategy_Mutation::~Strategy_Mutation()
 {}
 
+Memento::Memento(chr_set population, MutationType mutation, SelectionType selection)
+:population_state(population), mutation_type_state(mutation), selection_type_state(selection)
+{}
+
 float Genome::fitness(chromosome chr)
 {
     float distance=0;
@@ -237,6 +241,15 @@ void Genome::run_GA()
             break;
         }
     }
+}
+
+Memento* Genome::createMemento()
+{
+
+}
+void Genome::reinstateMemento(Memento* memento)
+{
+
 }
 
 

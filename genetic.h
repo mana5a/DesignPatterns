@@ -1,4 +1,4 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
 #define K 3
@@ -21,88 +21,103 @@ using namespace std;
 
 enum MutationType
 {
-    Swap, Inversion, Scramble
+	Swap,
+	Inversion,
+	Scramble
 };
 
 enum SelectionType
 {
-    RouletteWheel, Tournament
+	RouletteWheel,
+	Tournament
 };
 
 typedef vector<int> chromosome;
 
-typedef vector <pair<vector<int>,float>> chr_set;
+typedef vector<pair<vector<int>, float>> chr_set;
 
 class Strategy_Mutation
 {
-  public:
-  virtual ~Strategy_Mutation()=0;
-  virtual chromosome mutation(chromosome chr)=0;
+public:
+	virtual ~Strategy_Mutation() = 0;
+	virtual chromosome mutation(chromosome chr) = 0;
 };
 
-class Swap_Mutation: public Strategy_Mutation
+class Swap_Mutation : public Strategy_Mutation
 {
-  public:
-    chromosome mutation(chromosome chr);
+public:
+	chromosome mutation(chromosome chr);
 };
 
-class Inversion_Mutation: public Strategy_Mutation
+class Inversion_Mutation : public Strategy_Mutation
 {
-  public:
-    chromosome mutation(chromosome chr);
+public:
+	chromosome mutation(chromosome chr);
 };
 
-class Scramble_Mutation: public Strategy_Mutation
+class Scramble_Mutation : public Strategy_Mutation
 {
-  public:
-    chromosome mutation(chromosome chr);
+public:
+	chromosome mutation(chromosome chr);
 };
 
 class Strategy_Selection
 {
-  public:
-  virtual ~Strategy_Selection()=0;
-  virtual chromosome selection(vector<pair<chromosome,float>> )=0;
+public:
+	virtual ~Strategy_Selection() = 0;
+	virtual chromosome selection(chr_set) = 0;
 };
 
-class Tournament_Selection: public Strategy_Selection
+class Tournament_Selection : public Strategy_Selection
 {
-  public:
-    chromosome selection(vector<pair<chromosome,float>> );
+public:
+	chromosome selection(chr_set);
 };
 
-class RouletteWheel_Selection: public Strategy_Selection
+class RouletteWheel_Selection : public Strategy_Selection
 {
-  public:
-    chromosome selection(vector<pair<chromosome,float>> );
+public:
+	chromosome selection(chr_set);
+};
+
+class Memento
+{
+	private:
+		chr_set population_state;
+		MutationType mutation_type_state;
+		SelectionType selection_type_state;
+		friend class Genome;
+	public:
+		Memento(chr_set population, MutationType mutation, SelectionType selection);
 };
 
 class Genome
 {
-    private:
-    vector<vector<int>> dist_mat;
-    vector<pair<chromosome, float>> population;
-    Strategy_Mutation *strategy_mutation_;
-    Strategy_Selection *strategy_selection_;
-    MutationType mutation_type_;
-    SelectionType selection_type_;
-    
-    public:
-    Genome();
-    void init_population();
-    
-    // chromosome mutation(chromosome chr);
-    void set_mutation_strategy(int);
-    void set_selection_strategy(int);
-    // void selection();
-    float fitness(chromosome chr);
+private:
+	vector<vector<int>> dist_mat;
+	chr_set population;
+	Strategy_Mutation *strategy_mutation_;
+	Strategy_Selection *strategy_selection_;
+	MutationType mutation_type_;
+	SelectionType selection_type_;
 
-    chr_set crossover(chromosome p1, chromosome p2);
+public:
+	Genome();
+	void init_population();
 
-    void display_population();
-    void display_chromosome(chromosome chr,float fit);
-    void display_dist_mat();
-    void operations_set();
+	void set_mutation_strategy(int);
+	void set_selection_strategy(int);
+	float fitness(chromosome chr);
 
-    void run_GA();
+	chr_set crossover(chromosome p1, chromosome p2);
+
+	void display_population();
+	void display_chromosome(chromosome chr, float fit);
+	void display_dist_mat();
+	void operations_set();
+
+	Memento *createMemento();
+	void reinstateMemento(Memento*);
+
+	void run_GA();
 };
