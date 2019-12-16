@@ -19,6 +19,8 @@ using namespace std;
 
 #define MUTATION_RATE 0.4
 
+#define PRESERVE 2
+
 enum MutationType
 {
 	Swap,
@@ -112,6 +114,7 @@ public:
 	float fitness(chromosome chr);
 
 	chr_set crossover(chromosome p1, chromosome p2);
+	chr_set elitism();
 
 	void display_population();
 	void display_chromosome(chromosome chr, float fit);

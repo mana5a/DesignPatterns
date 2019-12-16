@@ -19,6 +19,12 @@ bool AlmostEqualRelative(float A, float B)
     return (diff <= largest * FLT_EPSILON);
     
 }
+
+bool compare(pair<vector<int>, float> &c1, pair<vector<int>, float> &c2)
+{
+    return c1.second<c2.second;
+}
+
 std::ostream& operator<<(std::ostream& out, const MutationType value){
     static std::map<MutationType, std::string> strings;
     if (strings.size() == 0){

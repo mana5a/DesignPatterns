@@ -13,3 +13,5 @@ void menu(Genome&);
 void selection_menu(Genome&);
 
 void mutation_menu(Genome&);
+
+bool compare(pair<vector<int>, float> &c1, pair<vector<int>, float> &c2);

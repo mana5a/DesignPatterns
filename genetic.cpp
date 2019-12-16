@@ -79,7 +79,7 @@ void Genome::display_population()
         {
             cout << population[i].first[j]<<" ";
         }
-        cout<<population[i].second<<"\n";
+        cout<<"Fitness:"<<population[i].second<<"\n";
         cout<<"\n";
     }
 }
@@ -175,6 +175,19 @@ chr_set Genome::crossover(chromosome p1, chromosome p2)
     return children;
 }
 
+chr_set Genome::elitism()
+{
+    sort(population.begin(),population.end(),compare);
+    cout<<"Sorting\n";
+    display_population();
+    chr_set top2;
+    for(int i=0;i<PRESERVE;i++)
+    {
+        top2.push_back(*(population.begin()+i));
+    }      
+    return top2;
+}
+
 void Genome::run_GA()
 {
     cout<<"Initial Population\n";
@@ -215,9 +228,10 @@ void Genome::run_GA()
         display_population();
         
         //set_selection_strategy(Tournament);
-        vector<pair<chromosome,float>> new_pop;
+        //vector<pair<chromosome,float>> new_pop;
         float avg_fitness=0;
-        for(int j=0;j<POPULATION_SIZE;++j)
+        chr_set new_pop=elitism();
+        for(int j=PRESERVE;j<POPULATION_SIZE;++j)
         {
             chromosome c;//=population[i].first;
             c=strategy_selection_->selection(population);
